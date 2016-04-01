@@ -14,7 +14,7 @@ Full documentation is located at [voucherify.readme.io](https://voucherify.readm
 
 - Send voucher code in SMS message (`/voucher-code/:recipient/send`)
 - Handler for inbound messages - send voucher code in SMS to specific phone number, as a result service will call back you (`/voucher-code/verify`)
-- Call to customer after sucesfully redeemed voucher and bring a few options to choose (`/consultancy-call`)
+- Call to customer after successfully redeemed voucher and bring a few options to choose (`/consultancy-call`)
 - Redirect call to consultant (redirect to some configurable phone number) (`/consultancy-call`)
 
 
@@ -25,7 +25,7 @@ Full documentation is located at [voucherify.readme.io](https://voucherify.readm
 `src\config.js`
 
 ```javascript
-    host: 'placeholder', // Address of your app visible from internet - Twilio needs it to cinfigure properly routing 
+    host: 'placeholder', // Address of your app visible from internet - Twilio needs it to configure properly routing 
     twilio: {
         account_sid: "placeholder",
         auth_token: "placeholder",
@@ -36,7 +36,7 @@ Full documentation is located at [voucherify.readme.io](https://voucherify.readm
 
 `src\views\redirect.xml`
 
-Put here a phone number to which you want to redirect call after sucefully redeemed voucher:
+Put here a phone number to which you want to redirect call after successfully redeemed voucher:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -48,7 +48,7 @@ Put here a phone number to which you want to redirect call after sucefully redee
 
 `src\server.js`
 
-If you already have Voucherify account, you can switch from our test one:
+If you already have Voucherify account, you can switch to it from our test one:
 
 ```javascript
 var voucherify = voucherifyClient({
