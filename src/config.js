@@ -15,9 +15,9 @@ module.exports = _.merge(
         port: process.env.PORT || 8080,
         host: '776d9f90.ngrok.io',
         twilio: {
-            account_sid: "ACcfc445f09f9d5f1642aee43dec676a39",
-            auth_token: "4f189034deda806aa76f9334a0174140",
-            sender: "+48799449674",
-            caller: "+48718811026"
+            account_sid: "placeholder",
+            auth_token: "placeholder",
+            sender: "placeholder",
+            caller: "placeholder"
         }
     }, cfg);

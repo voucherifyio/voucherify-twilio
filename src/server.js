@@ -39,11 +39,11 @@ app.get("/ping", function(req, res) {
     res.status(200).end("Ping");
 });
 
-var user = "48883660190";
+var user = "<test_phone_number>";
 
 //-- Send SMS with voucher code --
 app.post("/voucher-code/:recipient/send", function(req, res) {
-    var phone = req.params.recipient || "48883660190";
+    var phone = req.params.recipient;
     user = phone;
 
     twilio.send_sms("Ahoy from SaaSTechMeetup! Reply with code: NODEJS to get access to your consultancy service.", user)
