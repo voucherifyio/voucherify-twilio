@@ -42,7 +42,7 @@ app.get("/ping", function(req, res) {
 var user = "48883660190";
 
 //-- Send SMS with voucher code --
-app.post("/voucher-code/:recipient", function(req, res) {
+app.post("/voucher-code/:recipient/send", function(req, res) {
     var phone = req.params.recipient || "48883660190";
     user = phone;
 
@@ -55,6 +55,53 @@ app.post("/voucher-code/:recipient", function(req, res) {
         });
 
     res.status(200).end("Ok");
+});
+
+//-- Response to SMS with voucher code --
+app.post("/voucher-code/verify", function(req, res) {
+    console.log("[voucher-code][verify] Request Body: %j", req.body);
+    var code_sender = req.body.From;
+    var voucher_code = req.body.Body;
+
+    //Redeem voucher
+    voucherify.redeem(voucher_code, code_sender)
+        .then(function(result) {
+            console.log("[voucher-code] Voucher succesfully redeemed Redemption: %j", result);
+
+            // Make a phone call to customer
+            twilio.call(code_sender, "https://" + cfg.host + "/consultancy-call")
+                .then(function(result) {
+                    console.log("[voucher-code][verify][phone-call] Call made to User: %s", code_sender);
+                })
+                .catch(function(error) {
+                    console.error("[voucher-code][verify][phone-call][error] Call didn't go through User: %s Voucher: %s Message: %s Error: %j", code_sender, voucher_code, error, error);
+                });
+        })
+        .catch(function(error) {
+            console.error("[voucher-code][verify][error] Voucher redemption failed User: %s Voucher: %s Message: %s Error: %j", code_sender, voucher_code, error, error);
+        });
+
+    res.status(200).end("Ok");
+});
+
+function render_html(data, template) {
+    var views_path      = path.join(__dirname, "./views/");
+    var template_path   = path.join(views_path, template);
+
+    return swig.renderFile(template_path, data);
+}
+
+app.post("/consultancy-call", function(req, res) {
+    console.log("[consultancy-call] Request Body: %j", req.body);
+    var digit = req.body.Digits;
+
+    var options = {
+        "1": "redirect.xml",
+        "*": "end-call.xml"
+    }
+
+    res.type('xml');
+    res.status(200).end(render_html({}, options[digit] || "call-center-menu.xml"));
 });
 
 http.createServer(app).listen(app.get('port'), function(){

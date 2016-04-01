@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response>
+    <Gather numDigits="1">
+        <Say voice="woman">Please press one to connect with agent. Please star two to hang up.</Say>
+    </Gather>
+    <Say>We didn't receive any input. Goodbye!</Say>
+</Response>
