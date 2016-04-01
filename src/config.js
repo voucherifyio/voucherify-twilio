@@ -13,7 +13,7 @@ module.exports = _.merge(
     {
         env: 'production',
         port: process.env.PORT || 8080,
-        host: '776d9f90.ngrok.io',
+        host: 'placeholder',
         twilio: {
             account_sid: "placeholder",
             auth_token: "placeholder",
