@@ -6,9 +6,6 @@ var fs              = require('fs');
 var cfg_path  = path.join(__dirname ,'./config-' + process.env.NODE_ENV  + '.js');
 var cfg       = fs.existsSync(cfg_path) ? require(cfg_path) : {};
 
-/**
- * Load environment configuration - set NODE_ENV variable to load specific conf file
- */
 module.exports = _.merge(
     {
         env: 'production',
