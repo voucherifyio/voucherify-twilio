@@ -1,6 +1,3 @@
-//-- HACK: We ensure in any environment that Node.js will run on UTC --
-process.env.TZ      = "UTC";
-
 var express         = require('express');
 
 var config          = require('./config');
