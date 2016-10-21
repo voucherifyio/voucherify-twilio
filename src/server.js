@@ -7,10 +7,11 @@ var swig            = require('swig');
 var cfg             = require(__dirname + "/config");
 var path            = require('path');
 var voucherifyClient = require("voucherify");
+var util            = require("util");
  
 var voucherify = voucherifyClient({
-    applicationId: "c70a6f00-cf91-4756-9df5-47628850002b",
-    clientSecretKey: "3266b9f8-e246-4f79-bdf0-833929b1380c"
+    applicationId: "b0214323-77a9-46e9-bd6f-f8a91cca8de9",
+    clientSecretKey: "c834d4ea-c0d4-4d7d-ba37-79b47432e80c"
 });
 
 var twilio          = require('./twilio'); 
@@ -37,13 +38,25 @@ app.get("/ping", function(req, res) {
 });
 
 var user = "<test_phone_number>";
+var crm_user_profile = {
+    name: "Tomasz Pindel",
+    description: "Test SMS publish",
+    email: "tom+sms@voucherify.io"
+};
+
 
 //-- Send SMS with voucher code --
 app.post("/voucher-code/:recipient/send", function(req, res) {
     var phone = req.params.recipient;
     user = phone;
+    crm_user_profile.source_id = phone;
 
-    twilio.send_sms("Ahoy from SaaSTechMeetup! Reply with code: NODEJS to get access to your consultancy service.", user)
+    voucherify.publish({ campaign: "TEST-SMS", channel: "SMS", customer: crm_user_profile })
+        .then(function(result) {
+            console.log("[voucher-code][send][sms] We will send voucher Voucher: %j User: %s ", result, user);
+
+            return twilio.send_sms(util.format("Ahoy from Voucherify Team! Reply with code: %s to get access to your consultancy service.", result.code), user);
+        })
         .then(function(result) {
             console.log("[voucher-code][send][sms] Voucher send to User: %s", user);
         })
@@ -57,7 +70,7 @@ app.post("/voucher-code/:recipient/send", function(req, res) {
 //-- Response to SMS with voucher code --
 app.post("/voucher-code/verify", function(req, res) {
     console.log("[voucher-code][verify] Request Body: %j", req.body);
-    var code_sender = req.body.From;
+    var code_sender = (req.body.From || "").replace("+", ""); // if phone number will the same like source_id of customer in publish then we will match customers
     var voucher_code = req.body.Body;
 
     //Redeem voucher
